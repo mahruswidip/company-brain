@@ -101,7 +101,16 @@ Di PC: buat key baru untuk setiap keperluan, daftarkan public key baru ke VPS, R
 - **Perhatian:** 14 file di export (terutama `continuation-summary`) masih berisi path absolut Mac (`/Users/mahruswidi/...`); hanya teks sejarah, tidak mempengaruhi fungsi. Status ikut apa adanya (MAH-5 dan MAH-6 tercatat `done` pada saat preview).
 - **Catatan hasil:** karena run dan log tidak ikut, opsi A cukup untuk struktur, brief, task, dan komentar. Opsi B hanya perlu kalau riwayat run/log dibutuhkan.
 
-**Rekomendasi:** pakai opsi A (export/import) lalu `import --dry-run` di PC; atur ulang workspace (`pos-saas`, `baditourweb`, `ai_video_maker_claude`) ke path WSL; pasang ulang plugin. Opsi B (salin instance) tidak dipakai kecuali ada kebutuhan riwayat.
+**KEPUTUSAN OWNER (19 Nov 2026): opsi A (export/import).** Export sungguhan belum dijalankan; tunggu PC siap.
+
+Setelah `import` di PC, lakukan:
+1. Pasang ulang plugin `kantor-virtual` (clone dari GitHub, `npm install`, `npm run build`, `paperclipai plugin install <path PC>`).
+2. Buat ulang workspace project **Konten & Desain** (path `ai_video_maker_claude` di PC).
+3. Buat ulang workspace project **Badi Tour** (path `baditour` di PC).
+4. Login ulang Claude/Codex di PC.
+(Workspace POS Kedai AWS `pos-saas` ikut diperiksa path-nya.)
+
+Catatan awal: pakai opsi A (export/import) lalu `import --dry-run` di PC; atur ulang workspace (`pos-saas`, `baditourweb`, `ai_video_maker_claude`) ke path WSL; pasang ulang plugin. Opsi B (salin instance) tidak dipakai kecuali ada kebutuhan riwayat.
 
 ## 6. Rencana di PC (Windows + WSL2)
 
@@ -122,10 +131,11 @@ Di PC: buat key baru untuk setiap keperluan, daftarkan public key baru ke VPS, R
 5. Bagian kecil `ai_video_maker_claude` (`.claude/skills`, `tools`, `docs`, profile/voice, fonts, `brand.env`) lewat Drive atau salin manual. `brand.env` saat ini tidak berisi rahasia; kalau kelak berisi, pindah manual, bukan lewat Drive umum.
 6. **SSH key agent read-only baru di PC** (pengganti `agent_ro_rosana`); public key dipasang ke VPS oleh owner. Key lama tidak disalin.
 7. Jalankan Paperclip di PC, `company import` (dry-run dulu), atur ulang path workspace dan skill lokal, pasang plugin `kantor-virtual`, cek `/MAH/kantor`.
-8. Setelah PC stabil: matikan service Mac, cabut key lama, owner hapus `~/baditourweb/assets/footage` (setelah backup Drive terverifikasi).
+8. Task baru untuk Eng Rosana Travel: masukkan `kbihuinvitation/` ke repo `WEBSITE-ROSANA-GROUP-2026` (tanpa `dist/` dan `node_modules/`), dikerjakan dari clone di PC, bukan di VPS.
+9. Setelah PC stabil: matikan service Mac, cabut key lama, owner hapus `~/baditourweb/assets/footage` (setelah backup Drive terverifikasi).
 
 ## 7. Keputusan / belum dicek
 
-- `kbihuinvitation/` di VPS Rosana: masuk repo Rosana atau repo sendiri (ada di OPEN_QUESTIONS.md).
+- ~~`kbihuinvitation/`~~ diputuskan 19 Nov: masuk repo `WEBSITE-ROSANA-GROUP-2026` tanpa `dist/` dan `node_modules/`; jadi task Eng Rosana Travel setelah pindah ke PC, tidak dikerjakan di VPS.
 - Folder `~/pos-aws` (prototipe lama, bukan git): tidak dipindah kecuali owner minta.
 - UI Paperclip belum dilihat langsung untuk routine; kesimpulan "tidak ada" berasal dari API dan export.

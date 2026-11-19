@@ -4,7 +4,7 @@
 > Semua keputusan owner sampai 18 Nov 2026 sudah dimasukkan ke brief masing-masing project.
 
 ## Butuh keputusan owner
-- `kbihuinvitation/` di VPS (`/var/www/rosana`) belum di git — masuk repo `WEBSITE-ROSANA-GROUP-2026` atau repo sendiri?
+(kosong)
 
 ## Bisa dicek agent sendiri (tidak perlu dijawab owner)
 - Travel: metode pembayaran Xendit yang aktif & versi API → cek kode/config (Eng Rosana Travel).
@@ -17,3 +17,6 @@
 ## Ditunda (keputusan owner)
 - Meta Pixel / GA Badi Tour → nanti.
 - CollectionClaw → ditunda.
+
+## Sudah diputuskan (19 Nov 2026)
+- `kbihuinvitation/` (VPS `/var/www/rosana`) → **masuk repo `WEBSITE-ROSANA-GROUP-2026`**, tanpa `dist/` dan `node_modules/`. Akan jadi task untuk Eng Rosana Travel **setelah pindah ke PC**. Jangan dikerjakan di VPS.
