@@ -48,7 +48,7 @@
 - CI/CD, staging aktif: ⚠️ PERLU DIKONFIRMASI.
 
 ### Repository
-- Diketahui: `backend_collection`. Repo frontend katalog & total repo: ⚠️ PERLU DIKONFIRMASI.
+- **Terkonfirmasi 19 Nov 2026 (cek git di VPS oleh owner):** repo = **`mahruswidip/WEBSITE-ROSANA-COLLECTION-2026`** (monorepo backend + frontend), di VPS `/var/www/collection`, branch utama **`master`** (bukan `main`), sinkron dengan GitHub, working tree bersih. `backend_collection` adalah foldernya di dalam repo itu.
 
 ### Service layer yang ada
 `ProductCreateService`, `ProductPrimaryImageService`, `StockMovementService`, `JastipOrderService`, `OrderService`, `ShippingAddressService`, `CustomerReplyAutofillService`.

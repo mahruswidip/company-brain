@@ -4,7 +4,7 @@
 > Semua keputusan owner sampai 18 Nov 2026 sudah dimasukkan ke brief masing-masing project.
 
 ## Butuh keputusan owner
-(kosong)
+- `kbihuinvitation/` di VPS (`/var/www/rosana`) belum di git — masuk repo `WEBSITE-ROSANA-GROUP-2026` atau repo sendiri?
 
 ## Bisa dicek agent sendiri (tidak perlu dijawab owner)
 - Travel: metode pembayaran Xendit yang aktif & versi API → cek kode/config (Eng Rosana Travel).

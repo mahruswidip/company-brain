@@ -1,13 +1,13 @@
 # Migrasi kantor AI: Mac → PC kantor (Windows + WSL2)
 
 Disusun 19 Nov 2026 dari pengecekan langsung di Mac. Tidak ada isi secret di dokumen ini.
-Mac tetap jalan: service Paperclip tidak dihentikan, tidak ada export yang dijalankan.
+Mac tetap jalan: service Paperclip tidak dihentikan, tidak ada export sungguhan yang dijalankan (hanya `export:preview`, hanya baca).
 
 ## 1. Repo dan remote GitHub
 
 | Folder di Mac | Remote | Status |
 |---|---|---|
-| `~/companyku/company-brain` (symlink `~/company-brain`) | `mahruswidip/company-brain` (alias `github-brain`) | **Belum ada remote.** Repo git baru dibuat 19 Nov, belum ada commit. Menunggu deploy key dipasang. |
+| `~/companyku/company-brain` (symlink `~/company-brain`) | `mahruswidip/company-brain` (alias `github-brain`) | Git dibuat 19 Nov, 1 commit lokal. Push ke `main` menunggu deploy key yang diterima GitHub (lihat setup-log). |
 | `~/Documents/pos-saas` | `mahruswidip/pos-saas` (alias `github-pos`) | Sudah di GitHub. `main` + `feat/ui-kasir-tahap1`. |
 | `~/baditourweb` (frontend/ + backend/) | `mahruswidip/baditour` (alias `github-badi`) | Sudah di GitHub. Hanya `main`. |
 | `~/companyku/plugins/kantor-virtual` | `mahruswidip/kantor-virtual` (alias `github-kantor`) | Sudah di GitHub. `main`. |
@@ -15,7 +15,10 @@ Mac tetap jalan: service Paperclip tidak dihentikan, tidak ada export yang dijal
 Belum ada di GitHub / tidak ditemukan sebagai git di Mac ini:
 - `~/ai_video_maker_claude`: **bukan git repo** (lihat bagian 2).
 - `~/pos-aws`: prototipe UI Flutter lama, bukan git. Brief bilang jangan dipakai. Tidak perlu pindah.
-- Kode Rosana Travel dan Rosana Collection: tidak ada repo git di Mac ini. Menurut brief kodenya ada di VPS. **Belum diverifikasi**, perlu dicek di VPS sebelum migrasi.
+- Kode Rosana (di VPS, dicek owner 19 Nov 2026; sudah di GitHub semua, tidak ada salinan git di Mac):
+  - `/var/www/rosana` → `git@github.com:mahruswidip/WEBSITE-ROSANA-GROUP-2026` (branch `main`, sinkron). Untracked: `kbihuinvitation/` (belum diputuskan, lihat OPEN_QUESTIONS.md).
+  - `/var/www/collection` → `git@github.com:mahruswidip/WEBSITE-ROSANA-COLLECTION-2026` (branch **`master`**, sinkron, bersih).
+  - `MOBILE-APP-ROSANA-BENAR` (Flutter) → `mahruswidip/MOBILE-APP-ROSANA-BENAR`, publik. Belum ada clone di Mac ini.
 - Cadangan lama (tidak perlu pindah): `~/baditourweb-frontend-git.bak`, `~/baditourweb-backend-git.bak`, `~/companyku/company-brain.bak-20261118`, `~/companyku/company-brain.zip`.
 - `~/baditourweb/assets/footage/` (3,6 GB) sengaja tidak masuk repo. Lihat bagian 2.
 
@@ -34,12 +37,14 @@ Belum ada di GitHub / tidak ditemukan sebagai git di Mac ini:
 | `tools/`, `docs/`, `riset/`, `AGENTS.md`, `CLAUDE.md` | kurang dari 100 KB | |
 
 - Total 641 file video/audio. **Yang besar = `clients/badi/footage` + `clients/badi/reels` + `clients/rosana/reels` (≈5,2 GB).** Selain itu kecil.
-- `clients/*/brand.env` berisi data brand; **periksa isinya sebelum disalin atau di-commit** (belum dibaca isinya).
+- `clients/*/brand.env`: dicek 19 Nov (hanya nama variabel). Tidak ada API key/token/password. Isinya setelan visual: `TEXT_COLOR BOX_COLOR ACCENT_COLOR` (ketiga klien), badi juga `TITLE_FONT LINE_FONT BRAND_FONT TITLE_SIZE LINE_SIZE TEXT_FX TITLE_COLOR VIGNETTE GRADE LOGO END_BG TAGLINE TAGLINE_COLOR TOP_SHADE LOGO_TOP LOGO_TOP_W LOGO_TOP_Y LOGO_CROP`. Aman lewat Drive; kalau nanti ada rahasia ditambahkan, pindahkan manual.
 - Usul: bagian kecil (skill, tools, docs, profile/voice, fonts, flyer) cukup lewat git. Footage dan reels dipindah manual (disk eksternal atau rsync), jangan lewat GitHub.
 - 13 skill Paperclip menunjuk ke `~/ai_video_maker_claude/.claude/skills`. Di PC path ini berubah, skill perlu diimpor ulang.
 
-### `~/baditourweb/assets` (3,6 GB)
-Footage dokumentasi keberangkatan 2 Nov 2026, 1.077 file. Tidak ada di GitHub. Pindah manual.
+### `~/baditourweb/assets/footage` (3,6 GB): duplikat
+- Terkonfirmasi owner: salinan dari `~/ai_video_maker_claude/clients/badi/footage` (lokasi **kanonik**). Gw cek: kedua folder 1.077 file dengan nama dan ukuran sama persis (dibandingkan lewat nama dan ukuran, isi tidak di-hash).
+- Owner yang menghapus salinan `~/baditourweb/assets/footage` setelah backup Drive terverifikasi. **Agent tidak boleh menghapus apa pun.**
+- Tidak ada di GitHub (`assets/footage/` ada di `.gitignore` repo baditour).
 
 ### Plugin `kantor-virtual`
 - Versi 0.6.4, sumber di `~/companyku/plugins/kantor-virtual` (sudah di GitHub).
@@ -66,14 +71,14 @@ Di PC: buat key baru untuk setiap keperluan, daftarkan public key baru ke VPS, R
   - POS Kedai AWS → `/Users/mahruswidi/Documents/pos-saas`
   - Konten & Desain → `/Users/mahruswidi/ai_video_maker_claude`
   - Badi Tour → `/Users/mahruswidi/baditourweb`
-  - Rosana Collection, Rosana Travel, Onboarding: **path tidak terbaca**, cek di UI.
+  - Rosana Collection, Rosana Travel, Onboarding, dan Konten & Desain: **tidak punya workspace** di export (Konten & Desain punya workspace `ai_video_maker_claude` di Paperclip tapi tidak diekspor karena tanpa `repoUrl` portabel).
   - Semua path ini absolut Mac dan harus diganti path WSL di PC.
 - **Skill (23, semua `local_path`):** 13 dari `~/ai_video_maker_claude/.claude/skills` (ig-*, agentmail, complain, slack, suggestion-box, dan lain-lain), 9 bawaan `@paperclipai/server/skills` (paperclip, paperclip-board, paperclip-create-agent, dan lain-lain), 1 `first-task`. Skill bawaan ikut terpasang dengan CLI. Skill buatan sendiri butuh foldernya ikut pindah.
-- **Routine:** tidak ada yang terbaca lewat API (daftar kosong). Belum diverifikasi lewat UI.
+- **Routine:** API `/routines` mengembalikan daftar kosong, dan `export:preview` tidak memuat satu pun issue recurring/routine. Kesimpulan: tidak ada routine. (UI belum dilihat langsung.)
 - **Plugin:** hanya `mahruslabs.kantor-virtual`.
 - **Service Mac (launchd, khusus Mac):** `~/Library/LaunchAgents/ing.paperclip.paperclipai.plist`. Menjalankan `paperclipai run --instance default`, `RunAtLoad`, `KeepAlive`, `PAPERCLIP_HOME=~/.paperclip`, PATH `/usr/bin:/bin:/usr/sbin:/sbin:~/.local/bin:/opt/homebrew/bin`. Di WSL2 tidak berlaku; ganti dengan systemd (kalau diaktifkan di WSL) atau `paperclipai service install` di PC.
 - **PATH Mac:** `~/.zshrc` hanya menambah `~/.local/bin`. Homebrew: `node`, `php`, `composer`, `ffmpeg`, `gh`, `gitleaks` terpasang. Di WSL pasang padanan lewat apt atau nvm.
-- **Postgres.app:** terlihat berjalan di Mac. Belum dicek apakah dipakai Paperclip atau hanya pos-saas lokal. Paperclip punya folder `db/` sendiri (155 MB).
+- **Database Paperclip:** `embedded-postgres` bawaan (port 54329, data di `~/.paperclip/instances/default/db`, 155 MB), **bukan** Postgres.app. Backup otomatis tiap 60 menit, retensi 30 hari, di `data/backups`. Postgres.app di Mac tidak dipakai Paperclip.
 - **Ukuran data:** `~/.paperclip/instances/default` 1,3 GB (`runtime` 1,0 GB, `db` 155 MB, `data` 113 MB, `logs` 7 MB). `~/.paperclip/cli` 2,6 GB hanya instalasi CLI, tidak perlu disalin.
 - **Berisi kunci:** `instances/default/secrets/` (`master.key`, `decision-signing.key`, `paperclip-cloud-connector.json`). Jangan di-commit ke git.
 
@@ -89,23 +94,38 @@ Di PC: buat key baru untuk setiap keperluan, daftarkan public key baru ke VPS, R
 - Kelebihan: membawa semuanya (database, riwayat, secret).
 - Risiko: berisi path absolut Mac di database, `config.json`, dan workspace. Database Postgres bawaan lintas OS (macOS ke Linux) belum tentu kompatibel kalau disalin sebagai file; sebaiknya lewat dump (`paperclipai db:backup`). `secrets/` ikut berpindah, jadi lewat jalur aman saja, bukan GitHub. Dua instance dengan identitas sama yang jalan bersamaan bisa bentrok (cloud connector, routine ganda). Versi CLI harus sama.
 
-**Rekomendasi sementara:** A untuk struktur (agent, project, skill, task) dan B hanya kalau riwayat penuh dibutuhkan. Uji A dulu dengan `export:preview`, lalu `import --dry-run` di PC.
+**Hasil `export:preview` (19 Nov 2026, include `company,agents,projects,issues,tasks,skills`, read-only, tidak ada yang ditulis):**
+- **Ikut:** 11 agent (role, adapter dan runtime config tanpa path `cwd`, permissions, budget, tampilan), 6 project, 23 skill (13 skill lokal `konten-desain` ikut sebagai isi file: SKILL.md dan script; 9 bawaan Paperclip dan `first-task` ikut sebagai paket file), 24 issue (20 done, 3 cancelled, 1 backlog) dengan **110 komentar**, dokumen (rencana, continuation-summary, runbook), 3 attachment (2 blob, ±2 MB), serta `README.md`, org chart, dan `.paperclip.yaml`. Total 110 file, payload ±3,7 MB.
+- **Tidak ikut:** riwayat run heartbeat dan log (isi `runtime/`, `logs/` ±1 GB), plugin (`kantor-virtual` harus dipasang ulang), secret dan API key agent (`envInputs` kosong; `secrets/` tidak ikut), path workspace Mac, routine (tidak ada), dan data biaya/aktivitas.
+- **Peringatan dari Paperclip:** (1) workspace `ai_video_maker_claude` project Konten & Desain dilewati karena tanpa `repoUrl` portabel; (2) task `mah-17` dan `mah-18` mereferensi workspace itu, tidak bisa diekspor portabel.
+- **Perhatian:** 14 file di export (terutama `continuation-summary`) masih berisi path absolut Mac (`/Users/mahruswidi/...`); hanya teks sejarah, tidak mempengaruhi fungsi. Status ikut apa adanya (MAH-5 dan MAH-6 tercatat `done` pada saat preview).
+- **Catatan hasil:** karena run dan log tidak ikut, opsi A cukup untuk struktur, brief, task, dan komentar. Opsi B hanya perlu kalau riwayat run/log dibutuhkan.
 
-## 6. Urutan yang disarankan di PC
+**Rekomendasi:** pakai opsi A (export/import) lalu `import --dry-run` di PC; atur ulang workspace (`pos-saas`, `baditourweb`, `ai_video_maker_claude`) ke path WSL; pasang ulang plugin. Opsi B (salin instance) tidak dipakai kecuali ada kebutuhan riwayat.
+
+## 6. Rencana di PC (Windows + WSL2)
 
 1. Pasang WSL2 (Ubuntu), Node, git, php/composer, ffmpeg, gitleaks, `paperclipai` versi `2026.1106.0`.
-2. Buat key SSH baru; pasang sebagai deploy key per repo.
-3. Clone empat repo ke folder di dalam WSL (bukan `/mnt/c`, supaya cepat).
-4. Pindahkan footage/reels manual.
-5. Jalankan Paperclip, import perusahaan (opsi A), set ulang path workspace dan skill.
-6. Pasang plugin `kantor-virtual`, cek halaman `/MAH/kantor`.
-7. Setelah PC stabil: matikan service Mac, cabut key lama.
+2. **Deploy key baru per repo di PC** (jangan salin key Mac), alias SSH:
+   | Alias | Repo |
+   |---|---|
+   | `github-rosana` | `mahruswidip/WEBSITE-ROSANA-GROUP-2026` |
+   | `github-collection` | `mahruswidip/WEBSITE-ROSANA-COLLECTION-2026` |
+   | `github-mobile` | `mahruswidip/MOBILE-APP-ROSANA-BENAR` |
+   | `github-pos` | `mahruswidip/pos-saas` |
+   | `github-badi` | `mahruswidip/baditour` |
+   | `github-brain` | `mahruswidip/company-brain` |
+   | `github-kantor` | `mahruswidip/kantor-virtual` |
+   Owner memasang public key baru di tiap repo (write). Setelah PC jalan, cabut deploy key Mac yang lama.
+3. **Clone 7 repo** ke dalam filesystem WSL (bukan `/mnt/c`): WEBSITE-ROSANA-GROUP-2026 (branch `main`), WEBSITE-ROSANA-COLLECTION-2026 (branch `master`), MOBILE-APP-ROSANA-BENAR, pos-saas, baditour, company-brain, kantor-virtual.
+4. **Footage dan reels lewat Google Drive** ke lokasi kanonik `ai_video_maker_claude/clients/badi/footage` (dan `reels`, `flyer`). Salinan `baditourweb/assets/footage` tidak ikut dipindah.
+5. Bagian kecil `ai_video_maker_claude` (`.claude/skills`, `tools`, `docs`, profile/voice, fonts, `brand.env`) lewat Drive atau salin manual. `brand.env` saat ini tidak berisi rahasia; kalau kelak berisi, pindah manual, bukan lewat Drive umum.
+6. **SSH key agent read-only baru di PC** (pengganti `agent_ro_rosana`); public key dipasang ke VPS oleh owner. Key lama tidak disalin.
+7. Jalankan Paperclip di PC, `company import` (dry-run dulu), atur ulang path workspace dan skill lokal, pasang plugin `kantor-virtual`, cek `/MAH/kantor`.
+8. Setelah PC stabil: matikan service Mac, cabut key lama, owner hapus `~/baditourweb/assets/footage` (setelah backup Drive terverifikasi).
 
-## 7. Yang belum dicek
+## 7. Keputusan / belum dicek
 
-- Isi `clients/*/brand.env` dan apakah ada secret di `ai_video_maker_claude`.
-- Lokasi kode Rosana Travel dan Rosana Collection.
-- Routine di UI Paperclip.
-- Path workspace Rosana Collection, Rosana Travel, Onboarding.
-- Isi sebenarnya paket export (belum ada `export:preview`).
-- Apakah Postgres.app dipakai Paperclip.
+- `kbihuinvitation/` di VPS Rosana: masuk repo Rosana atau repo sendiri (ada di OPEN_QUESTIONS.md).
+- Folder `~/pos-aws` (prototipe lama, bukan git): tidak dipindah kecuali owner minta.
+- UI Paperclip belum dilihat langsung untuk routine; kesimpulan "tidak ada" berasal dari API dan export.

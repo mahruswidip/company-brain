@@ -48,6 +48,8 @@
 - Versi tepat per 18 Nov 2026: ⚠️ cek repo.
 
 ### Repository
+**Terkonfirmasi 19 Nov 2026 (cek git di VPS oleh owner):** repo web = **`mahruswidip/WEBSITE-ROSANA-GROUP-2026`** (monorepo backend + frontend), di VPS `/var/www/rosana`, branch utama **`main`**, sinkron dengan GitHub. Di VPS ada folder `kbihuinvitation/` yang belum di git (lihat OPEN_QUESTIONS.md). Tabel di bawah adalah nama folder/modul dari rangkuman lama, bukan repo GitHub terpisah.
+
 | Repo | Isi | Status |
 |---|---|---|
 | `backend_rosanagroup` | Laravel API, admin Filament, booking, jamaah, pembayaran, Expo | Aktif |
